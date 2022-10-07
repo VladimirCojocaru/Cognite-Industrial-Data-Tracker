@@ -1,0 +1,14 @@
+statistics
+PythonTurtle
+flask
+flask_sqlalchemy
+flask-cors
+flask-dance
+requests
+numpy
+psycopg2
+oauthlib
+blinker
+werkzeug
+python-dotenv
+pathlib

@@ -1,0 +1,5 @@
+schedule
+psycopg2
+cognite-sdk==4.1.2
+python-dotenv
+pathlib

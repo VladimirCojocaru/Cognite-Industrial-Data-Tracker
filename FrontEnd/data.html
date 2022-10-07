@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognite Industrial Data</title>
+    <link rel="stylesheet" href="CSS/data.css">
+    <link rel="stylesheet" href="CSS/nav_bar.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"></script>
+</head>
+
+<body onload="initInterpolation()">
+    <script src="nav_bar.js"></script>
+    <script src="getSession.js"></script>
+
+    <section class="info">
+        <div>
+            <h1 style="text-align: center;font-size: 35px;margin: 1px;" id="title"></h1>
+            <h2 style="text-align: center;margin-top: 10px;" id="assetID"></h2>
+        </div>
+        <script>
+            var queryString = decodeURIComponent(window.location.search);
+            queryString = queryString.substring(1);
+            var queries = queryString.split("&");
+            document.getElementById("title").innerText = queries[1]
+            document.getElementById("assetID").innerText = 'Asset id: ' + queries[0]
+        </script>
+
+        <div style="height: 75%; width: 75%; margin-left: 12%;">
+            <canvas id="graph"></canvas>
+        </div>
+        <script src="data.js"></script>
+        <div style="text-align: center;">Outlier Detection</div>
+        <div class="flipswitch">
+            <input type="checkbox" name="flipswitch" class="flipswitch-cb" id="fs" onchange="updateColors()">
+            <label class="flipswitch-label" for="fs">
+                <div class="flipswitch-inner"></div>
+                <div class="flipswitch-switch"></div>
+            </label>
+        </div>
+        <div style="text-align: center;">
+            <form>
+                Select the start and end date for collecting data
+                <input type="text" name="calendar" size="22" id="date_range" , onchange="getGraphData();getData()">
+                <script>
+                    $(function() {
+                        $('input[name="calendar"]').daterangepicker({
+                            opens: 'center'
+                        });
+                    });
+                </script>
+            </form>
+        </div>
+
+        <form>
+            <div style="text-align: center;margin: 5px;">
+                <p>Interpolation rate: <output type="text" id="points" value=""></output></p>
+            </div>
+            <div style="text-align: center;">
+                <input type="range" id="slider" name="rangeInput" min="100" max="1000" step="100" onchange="updateInterpolation(this.value)">
+            </div>
+
+            <script>
+                function updateInterpolation(val) {
+                    document.getElementById('points').value = val + ' points';
+                    getGraphData()
+                }
+            </script>
+            <script>
+                function initInterpolation() {
+                    document.getElementById('points').value = '600 points';
+                }
+            </script>
+        </form>
+        <form class="choice-group">
+            <div style="text-align: center;">
+                Operation to perform on data:
+                <input type="radio" name="choice" value="average" onchange="getData()">Average
+                <input type="radio" name="choice" value="maximum" onchange="getData()">Maximum
+                <input type="radio" name="choice" value="minimum" onchange="getData()">Minimum
+            </div>
+        </form>
+        <div id="value" style="text-align: center;font-weight: bolder;"></div>
+    </section>
+
+</body>
+
+</html>

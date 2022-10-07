@@ -1,0 +1,87 @@
+version: "3.9"
+services:
+  backend:
+    #image: "backend:1.0"
+    build: 
+      context: .
+      dockerfile: Backend/Dockerfile
+    networks:
+      - backend
+      - frontend
+      - proxycloak
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+
+  dataingestion:
+    #image: "dataingestion:1.0"
+    build: 
+      context: .
+      dockerfile: DataIngestion/Dockerfile
+    networks:
+      - ingestion
+    depends_on:
+      - postgres
+      
+  postgres:
+    image: "postgres:14-alpine"
+    volumes:
+      - volum:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: Cognite_Industrial_Data
+    networks:
+      - ingestion
+      - backend
+    
+  frontend:
+    build:
+      context: FrontEnd
+      dockerfile: Dockerfile
+    #image: "frontend"
+    networks:
+      - frontend
+      - proxyfront
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:19.0.1
+    volumes:
+      - keycloak_volum:/opt/keycloak/data
+    networks:
+      - proxycloak
+    ports:
+      - "8080:8080"
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    entrypoint: ["/opt/keycloak/bin/kc.sh","start-dev"]
+  
+  apache:
+    image: httpd:latest
+    networks:
+      - proxycloak
+      - proxyfront
+    container_name: my-apache-app
+    ports:
+    - '9090:80'
+    volumes:
+    - ./FrontEnd:/usr/local/apache2/htdocs
+    - ./ReverseProxy/conf:/usr/local/apache2/conf
+
+volumes:
+  volum:
+  keycloak_volum:
+
+networks:
+  ingestion:
+  backend:
+  frontend:
+  proxycloak:
+  proxyfront:

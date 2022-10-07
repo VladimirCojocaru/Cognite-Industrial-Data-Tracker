@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+:root {
+    --primary_color: rgb(255, 52, 1);
+}
+
+body {
+    background: #F2F2F2;
+    margin: 0;
+    font-family: 'Poppins';
+}
+
+.home-btn {
+    text-decoration: underline;
+}
+
+section {
+    padding: 5em 2em;
+}
+
+.hero {
+    text-align: center;
+    padding-top: 13em;
+}
+
+.hero .explore_assets_button {
+    text-align: center;
+    background: var(--primary_color);
+    color: white;
+    text-decoration: none;
+    padding: .6em 1.3em;
+    font-size: 2em;
+    border-radius: 20px;
+    font-weight: normal;
+}
+
+.hero .explore_assets_button:hover {
+    background-color: red;
+    font-weight: bold;
+}
+
+.section_creators {
+    background: var(--primary_color);
+    font-weight: bold;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.section_creators ul {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.section_creators ul li {
+    background: red;
+    text-align: center;
+    padding: 2em 1em;
+    width: 80%;
+    margin: 0 1em;
+    border-radius: 1em;
+}
+
+.section_creators ul li img {
+    width: 100px;
+    height: auto;
+    border: 3px solid red;
+    border-radius: 50%;
+    margin-top: -4.5em;
+}
